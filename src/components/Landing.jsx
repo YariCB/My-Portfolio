@@ -76,6 +76,21 @@ function ContactIcon({ type }) {
   return <svg {...commonProps}><path d="M4 12 20 4l-5 16-3.5-6.5L4 12Z" /><path d="m11.5 13.5 4-4" /></svg>;
 }
 
+function ButterflySVG({ color, className = '', style, onAnimationEnd }) {
+  return (
+    <svg className={`butterfly ${className}`} style={style} viewBox="0 0 24 24" aria-hidden="true" onAnimationEnd={onAnimationEnd}>
+      <g className="wing wing-left">
+        <path d="M11.7 10.6C9.1 6.1 4.1 3.6 2.3 6.5c-1.3 2.1.7 5.8 4.9 7.1-3.3.4-5.9 2.2-5.3 4.4.7 2.4 5.2 2.2 8.9-1.2l1.6-1.7c-.2-1.6-.3-3-.7-4.5Z" fill={color} stroke="currentColor" strokeOpacity=".22" strokeWidth=".35" />
+      </g>
+      <g className="wing wing-right">
+        <path d="M12.3 10.6c2.6-4.5 7.6-7 9.4-4.1 1.3 2.1-.7 5.8-4.9 7.1 3.3.4 5.9 2.2 5.3 4.4-.7 2.4-5.2 2.2-8.9-1.2l-1.6-1.7c.2-1.6-.3-3-.7-4.5Z" fill={color} stroke="currentColor" strokeOpacity=".22" strokeWidth=".35" />
+      </g>
+      <path d="M12 9.2c-1.1 2.5-1.2 6.1 0 9.1 1.2-3 1.1-6.6 0-9.1ZM11.7 8.7C10.6 6.2 9.2 5.3 8.2 4.9m4.1 3.8c1.1-2.5 2.5-3.4 3.5-3.8" fill="none" stroke="currentColor" strokeWidth=".55" strokeLinecap="round" />
+      <path d="M12 18.3v3.4" fill="none" stroke="currentColor" strokeWidth=".6" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 export default function Landing() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [language, setLanguage] = useState('es');
@@ -112,19 +127,6 @@ export default function Landing() {
   useEffect(() => {
     if (activeSection === 'experience') setHasStartedExperience(true);
   }, [activeSection]);
-
-  const ButterflySVG = ({ color, className = '', style, onAnimationEnd }) => (
-    <svg className={`butterfly ${className}`} style={style} viewBox="0 0 24 24" aria-hidden="true" onAnimationEnd={onAnimationEnd}>
-      <g className="wing wing-left">
-        <path d="M11.7 10.6C9.1 6.1 4.1 3.6 2.3 6.5c-1.3 2.1.7 5.8 4.9 7.1-3.3.4-5.9 2.2-5.3 4.4.7 2.4 5.2 2.2 8.9-1.2l1.6-1.7c-.2-1.6-.3-3-.7-4.5Z" fill={color} stroke="currentColor" strokeOpacity=".22" strokeWidth=".35" />
-      </g>
-      <g className="wing wing-right">
-        <path d="M12.3 10.6c2.6-4.5 7.6-7 9.4-4.1 1.3 2.1-.7 5.8-4.9 7.1 3.3.4 5.9 2.2 5.3 4.4-.7 2.4-5.2 2.2-8.9-1.2l-1.6-1.7c.2-1.6.3-3 .7-4.5Z" fill={color} stroke="currentColor" strokeOpacity=".22" strokeWidth=".35" />
-      </g>
-      <path d="M12 9.2c-1.1 2.5-1.2 6.1 0 9.1 1.2-3 1.1-6.6 0-9.1ZM11.7 8.7C10.6 6.2 9.2 5.3 8.2 4.9m4.1 3.8c1.1-2.5 2.5-3.4 3.5-3.8" fill="none" stroke="currentColor" strokeWidth=".55" strokeLinecap="round" />
-      <path d="M12 18.3v3.4" fill="none" stroke="currentColor" strokeWidth=".6" strokeLinecap="round" />
-    </svg>
-  );
 
   const MoonIcon = () => (
     <span className="animated-theme-icon" aria-hidden="true">
