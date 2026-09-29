@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './Landing.css';
 import yariStackImage from '../assets/Yari_Stack.png';
 import yariPhoto from '../assets/YariCB_Photo.jpg';
@@ -62,6 +62,7 @@ const sectionButterflyPositions = [
   { top: '18%', left: '31%' },
   { top: '76%', right: '34%' },
 ];
+const sectionIds = ['home', 'about-me', 'tech-stack', 'experience', 'projects', 'contact'];
 
 function ContactIcon({ type }) {
   const commonProps = { viewBox: '0 0 24 24', 'aria-hidden': 'true' };
@@ -92,6 +93,7 @@ function ButterflySVG({ color, className = '', style, onAnimationEnd }) {
 }
 
 export default function Landing() {
+  const landingRef = useRef(null);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [language, setLanguage] = useState('es');
   const [activeSection, setActiveSection] = useState('home');
@@ -102,19 +104,46 @@ export default function Landing() {
   const [hasCompletedExperienceFlight, setHasCompletedExperienceFlight] = useState(false);
 
   const toggleTheme = () => setIsDarkMode(!isDarkMode);
+  const handleNavClick = (sectionId) => {
+    setActiveSection(sectionId);
+    setIsMenuOpen(false);
+  };
   const labels = language === 'es'
     ? ['Inicio', 'Sobre mí', 'Stack Tecnológico', 'Experiencia', 'Proyectos', 'Contacto']
     : ['Home', 'About me', 'Tech Stack', 'Experience', 'Projects', 'Contact'];
-  const sectionIds = ['home', 'about-me', 'tech-stack', 'experience', 'projects', 'contact'];
 
   useEffect(() => {
-    const sections = sectionIds.map((id) => document.getElementById(id)).filter(Boolean);
-    const observer = new IntersectionObserver((entries) => {
-      const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-      if (visible) setActiveSection(visible.target.id);
-    }, { rootMargin: '-25% 0px -55% 0px', threshold: [0.1, 0.35, 0.6] });
-    sections.forEach((section) => observer.observe(section));
-    return () => observer.disconnect();
+    const scrollContainer = landingRef.current;
+    if (!scrollContainer) return undefined;
+
+    const sections = sectionIds.map((id) => scrollContainer.querySelector(`#${id}`)).filter(Boolean);
+    let frameId = 0;
+
+    const updateActiveSection = () => {
+      const sectionMarker = window.innerHeight * 0.35;
+      const currentSection = sections.reduce((current, section) => (
+        section.getBoundingClientRect().top <= sectionMarker ? section : current
+      ), sections[0]);
+
+      if (currentSection) setActiveSection(currentSection.id);
+    };
+
+    const handleScroll = () => {
+      window.cancelAnimationFrame(frameId);
+      frameId = window.requestAnimationFrame(updateActiveSection);
+    };
+
+    updateActiveSection();
+    scrollContainer.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', updateActiveSection);
+
+    return () => {
+      window.cancelAnimationFrame(frameId);
+      scrollContainer.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', updateActiveSection);
+    };
   }, []);
 
   useEffect(() => {
@@ -144,7 +173,7 @@ export default function Landing() {
   );
 
   return (
-    <main className={`landing-container ${isDarkMode ? 'dark' : 'light'}`}>
+    <main ref={landingRef} className={`landing-container ${isDarkMode ? 'dark' : 'light'}`}>
       {isMenuOpen && <button className="menu-backdrop" onClick={() => setIsMenuOpen(false)} aria-label="Cerrar menú" />}
       {/* Header */}
       <header className="site-header">
@@ -160,7 +189,7 @@ export default function Landing() {
               <button className="icon-button" onClick={toggleTheme} aria-label="Cambiar modo de color">{isDarkMode ? <SunIcon /> : <MoonIcon />}</button>
             </div>
           </div>
-          {labels.map((label, index) => <a onClick={() => setIsMenuOpen(false)} className={activeSection === sectionIds[index] ? 'active' : ''} href={`#${sectionIds[index]}`} key={label}>{label}</a>)}
+          {labels.map((label, index) => <a onClick={() => handleNavClick(sectionIds[index])} className={activeSection === sectionIds[index] ? 'active' : ''} href={`#${sectionIds[index]}`} key={sectionIds[index]}>{label}</a>)}
           <div className="drawer-footer">
             <span>Yarima Contreras Blanco</span>
             <span>© 2026</span>
@@ -200,7 +229,7 @@ export default function Landing() {
         const isExperience = sectionId === 'experience';
         const isContact = sectionId === 'contact';
         return (
-          <section className={`empty-section section-tone-${index + 1} ${isStack ? 'stack-section' : ''} ${isAbout ? 'about-section' : ''} ${isExperience ? `experience-section ${hasStartedExperience ? 'experience-visible' : ''}` : ''} ${isContact ? 'contact-section' : ''}`} id={sectionId} key={label}>
+          <section className={`empty-section section-tone-${index + 1} ${isStack ? 'stack-section' : ''} ${isAbout ? 'about-section' : ''} ${isExperience ? `experience-section ${hasStartedExperience ? 'experience-visible' : ''}` : ''} ${isContact ? 'contact-section' : ''}`} id={sectionId} key={sectionId}>
             <span>{String(index + 1).padStart(2, '0')}</span>
             {isAbout ? (
               <div className="about-layout">
