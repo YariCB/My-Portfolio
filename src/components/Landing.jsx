@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import './Landing.css';
+import yariStackImage from '../assets/Yari_Stack.png';
 
 const flock = Array.from({ length: 30 }, (_, index) => ({
   id: index,
@@ -19,8 +20,11 @@ const settled = [
   { id: 'bottom', top: '84%', left: '48%', color: 'var(--gradient-pink)', scale: 0.48, wingDelay: '0.24s' },
 ];
 
+const computerTools = ['C / C++', 'Python', 'JavaScript', 'HTML5 / CSS3', 'React JS', 'Flask / Django', 'SQL Server', 'PostgreSQL', 'Pentaho Data Integration', 'Power BI'];
+const designTools = ['MediBang Paint Pro', 'Krita', 'Wondershare Filmora X', 'Canva', 'Figma', 'Penpot', 'Grasshopper (Rhino)'];
+
 const sectionButterflyPositions = [
-  { top: '34%', right: '12%' },
+  { top: '18%', left: '10%' },
   { top: '22%', left: '11%' },
   { top: '69%', right: '18%' },
   { top: '18%', left: '31%' },
@@ -31,6 +35,7 @@ export default function Landing() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [language, setLanguage] = useState('es');
   const [activeSection, setActiveSection] = useState('inicio');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleTheme = () => setIsDarkMode(!isDarkMode);
   const labels = language === 'es'
@@ -78,10 +83,26 @@ export default function Landing() {
 
   return (
     <main className={`landing-container ${isDarkMode ? 'dark' : 'light'}`}>
+      {isMenuOpen && <button className="menu-backdrop" onClick={() => setIsMenuOpen(false)} aria-label="Cerrar menú" />}
       <header className="site-header">
         <a className="brand-mark" href="#inicio" aria-label="YCB, inicio">Y<span>C</span><b>B<i><ButterflySVG color="var(--gradient-pink)" /></i></b></a>
-        <nav className="main-nav" aria-label="Navegación principal">
-          {labels.map((label, index) => <a className={activeSection === sectionIds[index] ? 'active' : ''} href={`#${sectionIds[index]}`} key={label}>{label}</a>)}
+        <button className={`menu-toggle ${isMenuOpen ? 'open' : ''}`} onClick={() => setIsMenuOpen(!isMenuOpen)} aria-label="Abrir menú" aria-expanded={isMenuOpen}>
+          <span /><span /><span />
+        </button>
+        <nav className={`main-nav ${isMenuOpen ? 'open' : ''}`} aria-label="Navegación principal">
+          <div className="drawer-header">
+            <a className="brand-mark" href="#inicio" onClick={() => setIsMenuOpen(false)} aria-label="YCB, inicio">Y<span>C</span><b>B<i><ButterflySVG color="var(--gradient-pink)" /></i></b></a>
+            <div className="drawer-tools">
+              <button className="language-toggle" onClick={() => setLanguage(language === 'es' ? 'en' : 'es')} aria-label="Cambiar idioma">{language === 'es' ? 'EN' : 'ES'}</button>
+              <button className="icon-button" onClick={toggleTheme} aria-label="Cambiar modo de color">{isDarkMode ? <SunIcon /> : <MoonIcon />}</button>
+            </div>
+          </div>
+          {labels.map((label, index) => <a onClick={() => setIsMenuOpen(false)} className={activeSection === sectionIds[index] ? 'active' : ''} href={`#${sectionIds[index]}`} key={label}>{label}</a>)}
+          <div className="drawer-footer">
+            <span>Yarima Contreras Blanco</span>
+            <span>© 2026</span>
+            <a href="https://github.com/YariCB" target="_blank" rel="noreferrer" aria-label="GitHub"><svg className="github-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3.3-.4 6.8-1.6 6.8-7A5.4 5.4 0 0 0 19.3 4 5 5 0 0 0 19.2.8S18 0 15 2.1a13.4 13.4 0 0 0-6 0C6 0 4.8.8 4.8.8a5 5 0 0 0-.1 3.2A5.4 5.4 0 0 0 3.2 7.5c0 5.4 3.5 6.6 6.8 7A4.8 4.8 0 0 0 9 18v4" /><path d="M9 18c-4.5 2-5-2-7-2" /></svg></a>
+          </div>
         </nav>
         <div className="header-tools">
           <button className="language-toggle" onClick={() => setLanguage(language === 'es' ? 'en' : 'es')} aria-label="Cambiar idioma">{language === 'es' ? 'EN' : 'ES'}</button>
@@ -107,7 +128,29 @@ export default function Landing() {
         <a className="scroll-hint" href="#sobre-mi">{language === 'es' ? 'Desplázate para explorar' : 'Scroll to explore'} <span>↓</span></a>
       </section>
 
-      {labels.slice(1).map((label, index) => <section className={`empty-section section-tone-${index + 1}`} id={sectionIds[index + 1]} key={label}><span>{String(index + 1).padStart(2, '0')}</span><h2>{label}</h2><ButterflySVG className="section-butterfly" color={['var(--gradient-blue)', 'var(--gradient-lilac)', 'var(--gradient-pink)', 'var(--gradient-periwinkle)', 'var(--gradient-lavender)'][index]} style={{ '--top': sectionButterflyPositions[index].top, '--left': sectionButterflyPositions[index].left || 'auto', '--right': sectionButterflyPositions[index].right || 'auto', '--wing-delay': `${index * 0.14}s` }} /></section>)}
+      {labels.slice(1).map((label, index) => {
+        const sectionId = sectionIds[index + 1];
+        const isStack = sectionId === 'stack';
+        return (
+          <section className={`empty-section section-tone-${index + 1} ${isStack ? 'stack-section' : ''}`} id={sectionId} key={label}>
+            <span>{String(index + 1).padStart(2, '0')}</span>
+            <h2>{label}</h2>
+            {isStack ? (
+              <div className="stack-layout">
+                <div className="tool-column">
+                  <h3>{language === 'es' ? 'Computación' : 'Computing'}</h3>
+                  <div className="tool-list">{computerTools.map((tool) => <span key={tool}>{tool}</span>)}</div>
+                </div>
+                <div className="tool-column design-column">
+                  <h3>{language === 'es' ? 'Ilustración y Diseño' : 'Illustration and Design'}</h3>
+                  <div className="tool-list">{designTools.map((tool) => <span key={tool}>{tool}</span>)}</div>
+                </div>
+              </div>
+            ) : <ButterflySVG className="section-butterfly" color={['var(--gradient-blue)', 'var(--gradient-lilac)', 'var(--gradient-pink)', 'var(--gradient-periwinkle)', 'var(--gradient-lavender)'][index]} style={{ '--top': sectionButterflyPositions[index].top, '--left': sectionButterflyPositions[index].left || 'auto', '--right': sectionButterflyPositions[index].right || 'auto', '--wing-delay': `${index * 0.14}s` }} />}
+            {isStack && <><ButterflySVG className="stack-butterfly" color="var(--gradient-lilac)" style={{ '--wing-delay': '0.18s' }} /><img className="stack-illustration" src={yariStackImage} alt="Ilustración de Yari relacionada con el stack tecnológico" /></>}
+          </section>
+        );
+      })}
 
       <footer className="site-footer">
         <div className="footer-signature"><a className="footer-brand" href="#inicio">YCB</a><span>Yarima Contreras Blanco</span><span>© 2026</span><a className="footer-github" href="https://github.com/YariCB" target="_blank" rel="noreferrer" aria-label="GitHub"><svg className="github-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3.3-.4 6.8-1.6 6.8-7A5.4 5.4 0 0 0 19.3 4 5 5 0 0 0 19.2.8S18 0 15 2.1a13.4 13.4 0 0 0-6 0C6 0 4.8.8 4.8.8a5 5 0 0 0-.1 3.2A5.4 5.4 0 0 0 3.2 7.5c0 5.4 3.5 6.6 6.8 7A4.8 4.8 0 0 0 9 18v4" /><path d="M9 18c-4.5 2-5-2-7-2" /></svg></a></div>
