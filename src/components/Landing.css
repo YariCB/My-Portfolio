@@ -588,6 +588,122 @@
     transform: translateY(calc(-50% - 10px)) rotate(5deg) scale(0.98);
   }
 }
+.experience-section {
+  min-height: 118svh;
+  overflow: hidden;
+  text-align: center;
+}
+.experience-timeline {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  max-width: 760px;
+  margin: 34px auto 0;
+  padding: 12px 0 120px;
+}
+.experience-timeline::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  bottom: 72px;
+  left: 50%;
+  width: 1px;
+  background: linear-gradient(var(--gradient-blue), var(--gradient-pink));
+  opacity: 0.55;
+  transform: translateX(-50%);
+}
+.experience-card {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: min(100%, 520px);
+  box-sizing: border-box;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 18px 20px;
+  border: 1px solid rgba(118, 99, 189, 0.23);
+  border-radius: 10px;
+  background: rgba(237, 240, 255, 0.96);
+  box-shadow: 0 12px 24px rgba(62, 51, 110, 0.08);
+  text-align: left;
+  opacity: 0;
+  transform: translateY(18px) scale(0.98);
+}
+.experience-card:nth-child(odd) { align-self: flex-start; }
+.experience-card:nth-child(even) { align-self: flex-end; }
+.dark .experience-card { background: rgba(30, 27, 75, 0.96); }
+.experience-visible .experience-card { animation: experience-card-in 0.75s ease-out forwards; }
+.experience-visible .experience-card:nth-child(1) { animation-delay: 0.8s; }
+.experience-visible .experience-card:nth-child(2) { animation-delay: 1.7s; }
+.experience-visible .experience-card:nth-child(3) { animation-delay: 2.6s; }
+.experience-visible .experience-card:nth-child(4) { animation-delay: 3.5s; }
+@keyframes experience-card-in {
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.experience-card-icon {
+  display: grid;
+  flex: 0 0 28px;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid rgba(156, 95, 227, 0.5);
+  border-radius: 50%;
+  background: rgba(206, 191, 254, 0.2);
+  color: #9c5fe3;
+  font-size: 0.9rem;
+}
+.experience-card h3 {
+  margin: 0 0 7px;
+  color: var(--text-light);
+  font-size: clamp(0.95rem, 1.8vw, 1.1rem);
+  line-height: 1.3;
+}
+.experience-card p,
+.experience-card small {
+  display: block;
+  margin: 0;
+  color: var(--text-light);
+  line-height: 1.45;
+}
+.experience-card p { font-size: 0.86rem; }
+.experience-card small { color: #766f91; font-size: 0.76rem; }
+.dark .experience-card h3,
+.dark .experience-card p,
+.dark .experience-card small { color: var(--text-dark); }
+.experience-butterfly {
+  top: 18%;
+  right: 80%;
+  left: auto;
+  z-index: 3;
+  opacity: 0;
+  animation: none;
+}
+.experience-visible .experience-butterfly {
+  animation: experience-flight 6s cubic-bezier(0.42, 0, 0.25, 1) forwards;
+  animation-iteration-count: 1;
+}
+.experience-visible .experience-butterfly .wing {
+  animation-iteration-count: infinite;
+}
+@keyframes experience-flight {
+  0% { top: 18%; right: 80%; opacity: 0; transform: translateY(-50%) rotate(-18deg) scale(0.65); }
+  8% { opacity: 0.9; }
+  24% { top: 30%; right: 47%; transform: translateY(-50%) rotate(12deg) scale(0.9); }
+  43% { top: 44%; right: 76%; transform: translateY(-50%) rotate(-10deg) scale(0.86); }
+  62% { top: 57%; right: 40%; transform: translateY(-50%) rotate(9deg) scale(0.92); }
+  80% { top: 68%; right: 27%; transform: translateY(-50%) rotate(-5deg) scale(0.9); }
+  100% { top: 69%; right: 18%; opacity: 0.8; transform: translateY(-50%) rotate(5deg) scale(0.9); }
+}
+.experience-butterfly.experience-flight-complete {
+  top: 69%;
+  right: 18%;
+  opacity: 0.8;
+  transform: translateY(-50%) rotate(5deg) scale(0.9);
+  animation: none;
+}
 .stack-section {
   min-height: 88svh;
   padding-bottom: 180px;
@@ -1242,6 +1358,29 @@
   }
   .about-highlights {
     grid-template-columns: 1fr;
+  }
+  .experience-section {
+    min-height: 105svh;
+    padding-bottom: 90px;
+  }
+  .experience-timeline {
+    gap: 14px;
+    margin-top: 28px;
+    padding: 12px 8px 82px 18px;
+  }
+  .experience-timeline::before {
+    left: 8px;
+    bottom: 52px;
+  }
+  .experience-card,
+  .experience-card:nth-child(odd),
+  .experience-card:nth-child(even) {
+    align-self: stretch;
+    width: 100%;
+    padding: 15px 14px;
+  }
+  .experience-butterfly {
+    right: 8%;
   }
   .stack-section {
     min-height: 100svh;

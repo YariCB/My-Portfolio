@@ -28,6 +28,32 @@ const aboutImageSources = [
   { src: yariPhoto, alt: 'Yarima en un paisaje montañoso' },
   { src: yariArt, alt: 'Ilustración creada por Yarima' },
 ];
+const experienceEntries = [
+  {
+    title: { es: 'Auxiliar docente', en: 'Teaching Assistant' },
+    organization: { es: 'Universidad Central de Venezuela (UCV)', en: 'Central University of Venezuela (UCV)' },
+    period: { es: 'Abril de 2025 - actualidad', en: 'April 2025 - present' },
+    mode: { es: 'Híbrido', en: 'Hybrid' },
+  },
+  {
+    title: { es: 'Preparadora - Matemáticas Discretas I', en: 'Teaching Assistant - Discrete Mathematics I' },
+    organization: { es: 'Universidad Central de Venezuela (UCV)', en: 'Central University of Venezuela (UCV)' },
+    period: { es: 'Abril de 2024 - actualidad', en: 'April 2024 - present' },
+    mode: { es: 'Presencial', en: 'On-site' },
+  },
+  {
+    title: { es: 'Ilustradora digital', en: 'Digital Illustrator' },
+    organization: { es: 'Independiente', en: 'Self-employed' },
+    period: { es: 'Junio de 2020 - actualidad', en: 'June 2020 - present' },
+    mode: { es: 'Remoto', en: 'Remote' },
+  },
+  {
+    title: { es: 'Desarrolladora Full Stack', en: 'Full Stack Developer' },
+    organization: { es: 'Consultora TDV --> Gipsy', en: 'TDV Consulting --> Gipsy' },
+    period: { es: 'Diciembre de 2024 - abril de 2026', en: 'December 2024 - April 2026' },
+    mode: { es: 'Remoto', en: 'Remote' },
+  },
+];
 
 const sectionButterflyPositions = [
   { top: '18%', left: '10%' },
@@ -43,6 +69,8 @@ export default function Landing() {
   const [activeSection, setActiveSection] = useState('inicio');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [aboutImage, setAboutImage] = useState(0);
+  const [hasStartedExperience, setHasStartedExperience] = useState(false);
+  const [hasCompletedExperienceFlight, setHasCompletedExperienceFlight] = useState(false);
 
   const toggleTheme = () => setIsDarkMode(!isDarkMode);
   const labels = language === 'es'
@@ -67,8 +95,12 @@ export default function Landing() {
     return () => window.clearInterval(imageRotation);
   }, []);
 
-  const ButterflySVG = ({ color, className = '', style }) => (
-    <svg className={`butterfly ${className}`} style={style} viewBox="0 0 24 24" aria-hidden="true">
+  useEffect(() => {
+    if (activeSection === 'experiencia') setHasStartedExperience(true);
+  }, [activeSection]);
+
+  const ButterflySVG = ({ color, className = '', style, onAnimationEnd }) => (
+    <svg className={`butterfly ${className}`} style={style} viewBox="0 0 24 24" aria-hidden="true" onAnimationEnd={onAnimationEnd}>
       <g className="wing wing-left">
         <path d="M11.7 10.6C9.1 6.1 4.1 3.6 2.3 6.5c-1.3 2.1.7 5.8 4.9 7.1-3.3.4-5.9 2.2-5.3 4.4.7 2.4 5.2 2.2 8.9-1.2l1.6-1.7c-.2-1.6-.3-3-.7-4.5Z" fill={color} stroke="currentColor" strokeOpacity=".22" strokeWidth=".35" />
       </g>
@@ -149,8 +181,9 @@ export default function Landing() {
         const sectionId = sectionIds[index + 1];
         const isStack = sectionId === 'stack';
         const isAbout = sectionId === 'sobre-mi';
+        const isExperience = sectionId === 'experiencia';
         return (
-          <section className={`empty-section section-tone-${index + 1} ${isStack ? 'stack-section' : ''} ${isAbout ? 'about-section' : ''}`} id={sectionId} key={label}>
+          <section className={`empty-section section-tone-${index + 1} ${isStack ? 'stack-section' : ''} ${isAbout ? 'about-section' : ''} ${isExperience ? `experience-section ${hasStartedExperience ? 'experience-visible' : ''}` : ''}`} id={sectionId} key={label}>
             <span>{String(index + 1).padStart(2, '0')}</span>
             {isAbout ? (
               <div className="about-layout">
@@ -193,6 +226,19 @@ export default function Landing() {
                   <div className="tool-list">{designTools.map((tool) => <span key={tool}>{tool}</span>)}</div>
                 </div>
               </div>
+              </>
+            ) : isExperience ? (
+              <>
+                <h2>{label}</h2>
+                <div className="experience-timeline">
+                  {experienceEntries.map((entry) => <article className="experience-card" key={entry.title.en}>
+                    <span className="experience-card-icon" aria-hidden="true">✦</span>
+                    <div><h3>{entry.title[language]}</h3><p>{entry.organization[language]}</p><small>{entry.period[language]}</small><small>{entry.mode[language]}</small></div>
+                  </article>)}
+                </div>
+                <ButterflySVG className={`section-butterfly experience-butterfly ${hasCompletedExperienceFlight ? 'experience-flight-complete' : ''}`} color="var(--gradient-pink)" style={{ '--wing-delay': '0.28s' }} onAnimationEnd={(event) => {
+                  if (event.target === event.currentTarget) setHasCompletedExperienceFlight(true);
+                }} />
               </>
             ) : <><h2>{label}</h2><ButterflySVG className="section-butterfly" color={['var(--gradient-blue)', 'var(--gradient-lilac)', 'var(--gradient-pink)', 'var(--gradient-periwinkle)', 'var(--gradient-lavender)'][index]} style={{ '--top': sectionButterflyPositions[index].top, '--left': sectionButterflyPositions[index].left || 'auto', '--right': sectionButterflyPositions[index].right || 'auto', '--wing-delay': `${index * 0.14}s` }} /></>}
             {isStack && <><ButterflySVG className="stack-butterfly" color="var(--gradient-lilac)" style={{ '--wing-delay': '0.18s' }} /><img className="stack-illustration" src={yariStackImage} alt="Ilustración de Yari relacionada con el stack tecnológico" /></>}
