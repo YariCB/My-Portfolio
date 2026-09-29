@@ -1,0 +1,195 @@
+/* Variables de color */
+:root {
+  --gradient-blue: #a2c1fb;
+  --gradient-lilac: #b3c0fb;
+  --gradient-periwinkle: #c1befd;
+  --gradient-pink: #cebffe;
+  --gradient-lavender: #d9bffe;
+  
+  --bg-light: #edf0ff;
+  --text-light: #393653;
+  
+  --bg-dark: #1e1b4b; /* Violeta muy oscuro */
+  --text-dark: #ded5ef;
+}
+
+/* Contenedor principal */
+.landing-container {
+  position: relative;
+  width: 100%;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+.landing-container.light {
+  background-color: var(--bg-light);
+  color: var(--text-light);
+}
+
+.landing-container.dark {
+  background-color: var(--bg-dark);
+  color: var(--text-dark);
+}
+
+/* Botón de tema */
+.theme-toggle {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(5px);
+  color: inherit;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+}
+
+.theme-toggle:hover {
+  transform: scale(1.05);
+}
+
+.animated-theme-icon { display: inline-flex; width: 18px; height: 18px; }
+.animated-theme-icon svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2; }
+.theme-toggle:hover .animated-theme-icon svg { animation: theme-icon-wiggle 1.2s ease-in-out; }
+@keyframes theme-icon-wiggle { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-10deg); } 50% { transform: rotate(10deg); } 75% { transform: rotate(-5deg); } }
+
+/* Área de animación de mariposas */
+.animation-area {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* Para no interferir con clics */
+}
+
+.butterfly {
+  width: 56px;
+  height: 56px;
+  opacity: 0.82;
+  filter: saturate(2.0) drop-shadow(0 5px 7px rgba(94, 88, 145, 0.18));
+}
+
+.wing {
+  transform-box: fill-box;
+  transform-origin: center bottom;
+  animation-duration: 0.52s;
+  animation-timing-function: ease-in-out;
+  animation-delay: var(--wing-delay, 0s);
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+.wing-left {
+  animation-name: wing-flap-left;
+}
+
+.wing-right {
+  animation-name: wing-flap-right;
+  animation-delay: calc(var(--wing-delay, 0s) + 0.08s);
+}
+
+@keyframes wing-flap-left {
+  from { transform: translateX(-1.4px) rotate(-4deg); }
+  to { transform: translateX(0.8px) rotate(3deg); }
+}
+
+@keyframes wing-flap-right {
+  from { transform: translateX(1.4px) rotate(4deg); }
+  to { transform: translateX(-0.8px) rotate(-3deg); }
+}
+
+.flock,
+.settled-butterflies { position: absolute; inset: 0; }
+
+.flying-butterfly {
+  position: absolute;
+  top: var(--top);
+  left: -12vw;
+  width: 44px;
+  height: 44px;
+  opacity: 0;
+  transform: scale(var(--scale));
+  animation: fly-across var(--duration) linear var(--delay) 1 both;
+}
+
+.settled-butterfly {
+  position: absolute;
+  top: var(--top);
+  left: var(--left);
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(var(--scale));
+  animation: settle-in 0.9s 7.4s ease-out both;
+}
+
+@keyframes fly-across {
+  0% { opacity: 0; transform: translateX(0) translateY(15px) rotate(var(--rotation)) scale(var(--scale)); }
+  9% { opacity: 0.82; }
+  20% { transform: translateX(18vw) translateY(var(--arc)) rotate(calc(var(--rotation) * -1)) scale(var(--scale)); }
+  32% { transform: translateX(34vw) translateY(calc(var(--arc) * -1)) rotate(var(--rotation)) scale(var(--scale)); }
+  43% { transform: translateX(46vw) translateY(calc(var(--arc) + var(--loop))) rotate(calc(var(--rotation) * -1)) scale(var(--scale)); }
+  53% { transform: translateX(59vw) translateY(calc(var(--arc) * -1)) rotate(var(--rotation)) scale(var(--scale)); }
+  66% { transform: translateX(73vw) translateY(var(--arc)) rotate(calc(var(--rotation) * -1)) scale(var(--scale)); }
+  80% { opacity: 0.82; transform: translateX(94vw) translateY(calc(var(--arc) * -1)) rotate(var(--rotation)) scale(var(--scale)); }
+  100% { opacity: 0; transform: translateX(124vw) translateY(18px) rotate(calc(var(--rotation) * -1)) scale(var(--scale)); }
+}
+
+@keyframes settle-in { from { opacity: 0; transform: translate(-50%, -50%) scale(0.2); } to { opacity: 0.72; transform: translate(-50%, -50%) scale(var(--scale)); } }
+
+/* Contenedor de texto */
+.text-container {
+  position: relative;
+  max-width: calc(100% - 32px);
+  text-align: center;
+  z-index: 2;
+  opacity: 0;
+  transform: translateY(20px) scale(0.96);
+  transition: opacity 0.9s ease, transform 0.9s cubic-bezier(.2,.8,.2,1);
+}
+
+.text-container.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.title-main {
+  font-size: clamp(4rem, 12vw, 7rem);
+  line-height: 0.98;
+  margin: 0;
+  opacity: 1;
+  background: linear-gradient(105deg, var(--gradient-blue), var(--gradient-lilac), var(--gradient-periwinkle), var(--gradient-pink), var(--gradient-lavender));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: saturate(1.5) drop-shadow(0px 4px 4px rgba(0,0,0,0.1));
+}
+
+.title-sub {
+  color: inherit;
+  font-size: clamp(0.9rem, 2.6vw, 1.45rem);
+  font-family: "Lucida Handwriting";
+  font-style: italic;
+  font-weight: 300;
+  margin-top: 10px;
+  opacity: 1;
+  letter-spacing: 0.04em;
+}
+
+@media (max-width: 600px) {
+  .theme-toggle { top: 16px; right: 16px; padding: 9px 12px; font-size: 0.8rem; }
+  .butterfly { width: 42px; height: 42px; }
+  .flying-butterfly { width: 34px; height: 34px; }
+}
