@@ -25,7 +25,7 @@ const settled = [
 const computerTools = ['C / C++', 'Python', 'JavaScript', 'HTML5 / CSS3', 'React JS', 'Flask / Django', 'SQL Server', 'PostgreSQL', 'Pentaho Data Integration', 'Power BI'];
 const designTools = ['MediBang Paint Pro', 'Krita', 'Wondershare Filmora X', 'Canva', 'Figma', 'Penpot', 'Grasshopper (Rhino)'];
 const aboutImageSources = [
-  { src: yariPhoto, alt: 'Yarima en un paisaje montañoso' },
+  { src: yariPhoto, alt: 'Yarima en la Facultad de Ciencias, UCV' },
   { src: yariArt, alt: 'Ilustración creada por Yarima' },
 ];
 const experienceEntries = [
@@ -63,12 +63,26 @@ const sectionButterflyPositions = [
   { top: '76%', right: '34%' },
 ];
 
+function ContactIcon({ type }) {
+  const commonProps = { viewBox: '0 0 24 24', 'aria-hidden': 'true' };
+  if (type === 'mail') return <svg {...commonProps}><path d="M3 5.5h18v13H3z" /><path d="m3.5 6 8.5 7 8.5-7" /></svg>;
+  if (type === 'linkedin') return <svg {...commonProps}><path d="M5 8.5V20M5 5.2v.1M9.5 20v-7a3.5 3.5 0 0 1 7 0v7M9.5 16v-3a3.5 3.5 0 0 1 7 0v3M9.5 11v9" /></svg>;
+  if (type === 'github') return <svg {...commonProps}><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3.3-.4 6.8-1.6 6.8-7A5.4 5.4 0 0 0 19.3 4 5 5 0 0 0 19.2.8S18 0 15 2.1a13.4 13.4 0 0 0-6 0C6 0 4.8.8 4.8.8a5 5 0 0 0-.1 3.2A5.4 5.4 0 0 0 3.2 7.5c0 5.4 3.5 6.6 6.8 7A4.8 4.8 0 0 0 9 18v4" /><path d="M9 18c-4.5 2-5-2-7-2" /></svg>;
+  if (type === 'instagram') return <svg {...commonProps}><rect x="3.5" y="3.5" width="17" height="17" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.7" r=".8" fill="currentColor" stroke="none" /></svg>;
+  if (type === 'linktree') return <svg {...commonProps}><path d="M12 3v18M7 8h10M5 12h14M7 16h10M8 21h8" /></svg>;
+  if (type === 'monitor') return <svg {...commonProps}><path d="M12 17v4M22 13v2a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7M8 21h8" /><g><path d="m14.305 7.53.923-.382M15.228 4.852l-.923-.383M16.852 3.228l-.383-.924M16.852 8.772l-.383.923M19.148 3.228l.383-.924M19.53 9.696l-.382-.924M20.772 4.852l.924-.383M20.772 7.148l.924.383" /><circle cx="18" cy="6" r="3" /></g></svg>;
+  if (type === 'palette') return <svg {...commonProps}><path d="M12 2a10 9 0 0 0 0 20l.25 0a1.75 1.75 0 0 0 1.4-2.8l-.3-.4a1.75 1.75 0 0 1 1.4-2.8H17a5 5 0 0 0 5-5 10 9 0 0 0-10-9z" /><circle cx="6.5" cy="12.5" r=".65" fill="currentColor" stroke="none" /><circle cx="8.5" cy="7.5" r=".65" fill="currentColor" stroke="none" /><circle cx="13.5" cy="6.5" r=".65" fill="currentColor" stroke="none" /><circle cx="17.5" cy="10.5" r=".65" fill="currentColor" stroke="none" /></svg>;
+  if (type === 'send') return <svg className="send-icon" {...commonProps}><g className="send-icon-flight"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z" /><path d="m21.854 2.147-10.94 10.939" /></g><path className="send-icon-trail" d="M -3 28 C -0.5 26.8 1.6 24.6 3.3 22 C 4.8 19.7 5.2 17.6 4.2 16.1 C 3.2 14.7 1.4 14.5 0.3 15.8 C -0.9 17.2 -0.6 19.4 1.2 20.4 C 3.4 21.5 6.4 19.4 9 15.8" /></svg>;
+  return <svg {...commonProps}><path d="M4 12 20 4l-5 16-3.5-6.5L4 12Z" /><path d="m11.5 13.5 4-4" /></svg>;
+}
+
 export default function Landing() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [language, setLanguage] = useState('es');
-  const [activeSection, setActiveSection] = useState('inicio');
+  const [activeSection, setActiveSection] = useState('home');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [aboutImage, setAboutImage] = useState(0);
+  const [contactField, setContactField] = useState('computacion');
   const [hasStartedExperience, setHasStartedExperience] = useState(false);
   const [hasCompletedExperienceFlight, setHasCompletedExperienceFlight] = useState(false);
 
@@ -76,7 +90,7 @@ export default function Landing() {
   const labels = language === 'es'
     ? ['Inicio', 'Sobre mí', 'Stack Tecnológico', 'Experiencia', 'Proyectos', 'Contacto']
     : ['Home', 'About me', 'Tech Stack', 'Experience', 'Projects', 'Contact'];
-  const sectionIds = ['inicio', 'sobre-mi', 'stack', 'experiencia', 'proyectos', 'contacto'];
+  const sectionIds = ['home', 'about-me', 'tech-stack', 'experience', 'projects', 'contact'];
 
   useEffect(() => {
     const sections = sectionIds.map((id) => document.getElementById(id)).filter(Boolean);
@@ -96,7 +110,7 @@ export default function Landing() {
   }, []);
 
   useEffect(() => {
-    if (activeSection === 'experiencia') setHasStartedExperience(true);
+    if (activeSection === 'experience') setHasStartedExperience(true);
   }, [activeSection]);
 
   const ButterflySVG = ({ color, className = '', style, onAnimationEnd }) => (
@@ -132,13 +146,13 @@ export default function Landing() {
       {isMenuOpen && <button className="menu-backdrop" onClick={() => setIsMenuOpen(false)} aria-label="Cerrar menú" />}
       {/* Header */}
       <header className="site-header">
-        <a className="brand-mark" href="#inicio" aria-label="YCB, inicio">Y<span>C</span><b>B<i><ButterflySVG color="var(--gradient-pink)" /></i></b></a>
+        <a className="brand-mark" href="#home" aria-label="YCB, inicio">Y<span>C</span><b>B<i><ButterflySVG color="var(--gradient-pink)" /></i></b></a>
         <button className={`menu-toggle ${isMenuOpen ? 'open' : ''}`} onClick={() => setIsMenuOpen(!isMenuOpen)} aria-label="Abrir menú" aria-expanded={isMenuOpen}>
           <span /><span /><span />
         </button>
         <nav className={`main-nav ${isMenuOpen ? 'open' : ''}`} aria-label="Navegación principal">
           <div className="drawer-header">
-            <a className="brand-mark" href="#inicio" onClick={() => setIsMenuOpen(false)} aria-label="YCB, inicio">Y<span>C</span><b>B<i><ButterflySVG color="var(--gradient-pink)" /></i></b></a>
+            <a className="brand-mark" href="#home" onClick={() => setIsMenuOpen(false)} aria-label="YCB, inicio">Y<span>C</span><b>B<i><ButterflySVG color="var(--gradient-pink)" /></i></b></a>
             <div className="drawer-tools">
               <button className="language-toggle" onClick={() => setLanguage(language === 'es' ? 'en' : 'es')} aria-label="Cambiar idioma">{language === 'es' ? 'EN' : 'ES'}</button>
               <button className="icon-button" onClick={toggleTheme} aria-label="Cambiar modo de color">{isDarkMode ? <SunIcon /> : <MoonIcon />}</button>
@@ -159,7 +173,7 @@ export default function Landing() {
       </header>
 
       {/* Home */}
-      <section className="hero-content" id="inicio">
+      <section className="hero-content" id="home">
         <div className="animation-area">
           <div className="flock" aria-hidden="true">
             {flock.map((butterfly) => <ButterflySVG key={butterfly.id} className="flying-butterfly" color={butterfly.color} style={{ '--top': `${butterfly.top}%`, '--delay': `${butterfly.delay}s`, '--duration': `${butterfly.duration}s`, '--scale': butterfly.scale, '--arc': `${butterfly.arc}px`, '--loop': `${butterfly.loop}px`, '--rotation': `${butterfly.rotation}deg`, '--wing-delay': `${(butterfly.id % 5) * 0.08}s` }} />)}
@@ -173,17 +187,18 @@ export default function Landing() {
           <h2 className="title-sub">{language === 'es' ? 'Lic. Yarima Contreras Blanco' : 'B.S. Yarima Contreras Blanco'}</h2>
           <p className="hero-statement">{language === 'es' ? 'Lógica y arte visual para crear experiencias digitales que se sienten' : 'Merging logic and visual art to craft digital experiences people can feel'}</p>
         </div>
-        <a className="scroll-hint" href="#sobre-mi">{language === 'es' ? 'Desplázate para explorar' : 'Scroll to explore'} <span>↓</span></a>
+        <a className="scroll-hint" href="#about-me">{language === 'es' ? 'Desplázate para explorar' : 'Scroll to explore'} <span>↓</span></a>
       </section>
 
       {/* About me */}
       {labels.slice(1).map((label, index) => {
         const sectionId = sectionIds[index + 1];
-        const isStack = sectionId === 'stack';
-        const isAbout = sectionId === 'sobre-mi';
-        const isExperience = sectionId === 'experiencia';
+        const isStack = sectionId === 'tech-stack';
+        const isAbout = sectionId === 'about-me';
+        const isExperience = sectionId === 'experience';
+        const isContact = sectionId === 'contact';
         return (
-          <section className={`empty-section section-tone-${index + 1} ${isStack ? 'stack-section' : ''} ${isAbout ? 'about-section' : ''} ${isExperience ? `experience-section ${hasStartedExperience ? 'experience-visible' : ''}` : ''}`} id={sectionId} key={label}>
+          <section className={`empty-section section-tone-${index + 1} ${isStack ? 'stack-section' : ''} ${isAbout ? 'about-section' : ''} ${isExperience ? `experience-section ${hasStartedExperience ? 'experience-visible' : ''}` : ''} ${isContact ? 'contact-section' : ''}`} id={sectionId} key={label}>
             <span>{String(index + 1).padStart(2, '0')}</span>
             {isAbout ? (
               <div className="about-layout">
@@ -209,7 +224,7 @@ export default function Landing() {
                   <p>{language === 'es' ? 'También me apasiona descubrir historias en los datos, desde su procesamiento hasta su análisis, y compartir lo que aprendo con nuevas generaciones.' : 'I am also passionate about finding stories in data, from processing to analysis, and sharing what I learn with the next generation.'}</p>
                   <div className="about-highlights">
                     <div><span className="highlight-icon">✦</span><p><strong>{language === 'es' ? 'Preparadora de Matemáticas Discretas I' : 'Teaching Assistant, Discrete Mathematics I'}</strong><small>{language === 'es' ? 'Escuela de Computación UCV.' : 'UCV School of Computing.'}</small><small>{language === 'es' ? 'Desde abril de 2024' : 'Since April 2024'}</small></p></div>
-                    <div><span className="highlight-icon">✎</span><p><strong>{language === 'es' ? 'Ilustradora digital independiente' : 'Independent digital illustrator'}</strong><small>{language === 'es' ? 'Desde junio de 2020' : 'Since June 2020'}</small></p></div>
+                    <div><span className="highlight-icon">✎</span><p><strong>{language === 'es' ? 'Ilustradora Digital Independiente' : 'Independent Digital Illustrator'}</strong><small>{language === 'es' ? 'Desde junio de 2020' : 'Since June 2020'}</small></p></div>
                   </div>
                 </div>
               </div>
@@ -240,6 +255,34 @@ export default function Landing() {
                   if (event.target === event.currentTarget) setHasCompletedExperienceFlight(true);
                 }} />
               </>
+            ) : isContact ? (
+              <>
+                <h2>{language === 'es' ? '¡Hablemos!' : 'Let\'s talk!'}</h2>
+                <div className="contact-layout">
+                  <form className="contact-form" onSubmit={(event) => event.preventDefault()}>
+                    <p className="contact-intro">{language === 'es' ? '¿Tienes una idea, proyecto o pregunta? Escríbeme y encontremos la mejor forma de darle vida.' : 'Have an idea, project, or question? Write to me and let\'s find the best way to bring it to life.'}</p>
+                    <div className="contact-fields">
+                      <label>{language === 'es' ? 'Nombre completo' : 'Full name'}<input name="name" type="text" required placeholder={language === 'es' ? 'Tu nombre' : 'Your name'} /></label>
+                      <label>{language === 'es' ? 'Correo electrónico' : 'Email address'}<input name="email" type="email" required placeholder="tu@email.com" /></label>
+                      <fieldset className="contact-fieldset"><legend>{language === 'es' ? 'Campo de interés' : 'Area of interest'}</legend><label className="contact-toggle"><span className="toggle-track"><input name="field" type="checkbox" value="ilustracion" checked={contactField === 'ilustracion'} onChange={(event) => setContactField(event.target.checked ? 'ilustracion' : 'computacion')} /><span className="toggle-thumb"><ContactIcon type={contactField === 'ilustracion' ? 'palette' : 'monitor'} /></span></span><span className="contact-toggle-label">{contactField === 'ilustracion' ? (language === 'es' ? 'Ilustración' : 'Illustration') : (language === 'es' ? 'Computación' : 'Computer science')}</span></label></fieldset>
+                      <label className="contact-subject">{language === 'es' ? 'Asunto' : 'Subject'}<input name="_subject" type="text" required placeholder={language === 'es' ? '¿En qué puedo ayudarte?' : 'How can I help?'} /></label>
+                      <label className="contact-message">{language === 'es' ? 'Mensaje' : 'Message'}<textarea name="message" rows="5" required placeholder={language === 'es' ? 'Cuéntame un poco más...' : 'Tell me a little more...'} /></label>
+                    </div>
+                    <button className="contact-submit" type="submit">{language === 'es' ? 'Enviar correo' : 'Send email'} <ContactIcon type="send" /></button>
+                  </form>
+                  <div className="contact-links">
+                    <p className="contact-links-label">{language === 'es' ? 'También puedes encontrarme en' : 'You can also find me at'}</p>
+                    <div className="contact-link-grid">
+                      <a className="contact-link-card contact-dev" href="mailto:yarimacontreras.ucv@gmail.com"><span><ContactIcon type="mail" /></span><strong>{language === 'es' ? 'Correo de computación' : 'Computer science email'}</strong><small>yarimacontreras.ucv@gmail.com</small></a>
+                      <a className="contact-link-card contact-art" href="mailto:yaricb.art@gmail.com"><span><ContactIcon type="mail" /></span><strong>{language === 'es' ? 'Correo de arte' : 'Art email'}</strong><small>yaricb.art@gmail.com</small></a>
+                      <a className="contact-link-card" href="https://www.linkedin.com/in/yarima-contreras-blanco-1a37a7323/" target="_blank" rel="noreferrer"><span><ContactIcon type="linkedin" /></span><strong>LinkedIn</strong><small>{language === 'es' ? 'Conectemos' : 'Let\'s connect'}</small></a>
+                      <a className="contact-link-card" href="https://github.com/YariCB" target="_blank" rel="noreferrer"><span><ContactIcon type="github" /></span><strong>GitHub</strong><small>{language === 'es' ? 'Mis proyectos' : 'My projects'}</small></a>
+                      <a className="contact-link-card" href="https://linktr.ee/_yaricb_" target="_blank" rel="noreferrer"><span><ContactIcon type="linktree" /></span><strong>Linktree</strong><small>{language === 'es' ? 'Mi universo visual' : 'My visual universe'}</small></a>
+                      <a className="contact-link-card" href="https://www.instagram.com/_yaricb_/" target="_blank" rel="noreferrer"><span><ContactIcon type="instagram" /></span><strong>Instagram</strong><small>@_yaricb_</small></a>
+                    </div>
+                  </div>
+                </div>
+              </>
             ) : <><h2>{label}</h2><ButterflySVG className="section-butterfly" color={['var(--gradient-blue)', 'var(--gradient-lilac)', 'var(--gradient-pink)', 'var(--gradient-periwinkle)', 'var(--gradient-lavender)'][index]} style={{ '--top': sectionButterflyPositions[index].top, '--left': sectionButterflyPositions[index].left || 'auto', '--right': sectionButterflyPositions[index].right || 'auto', '--wing-delay': `${index * 0.14}s` }} /></>}
             {isStack && <><ButterflySVG className="stack-butterfly" color="var(--gradient-lilac)" style={{ '--wing-delay': '0.18s' }} /><img className="stack-illustration" src={yariStackImage} alt="Ilustración de Yari relacionada con el stack tecnológico" /></>}
           </section>
@@ -248,7 +291,7 @@ export default function Landing() {
 
       {/* Footer */}
       <footer className="site-footer">
-        <div className="footer-signature"><a className="footer-brand" href="#inicio">YCB</a><span>Yarima Contreras Blanco</span><span>© 2026</span><a className="footer-github" href="https://github.com/YariCB" target="_blank" rel="noreferrer" aria-label="GitHub"><svg className="github-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3.3-.4 6.8-1.6 6.8-7A5.4 5.4 0 0 0 19.3 4 5 5 0 0 0 19.2.8S18 0 15 2.1a13.4 13.4 0 0 0-6 0C6 0 4.8.8 4.8.8a5 5 0 0 0-.1 3.2A5.4 5.4 0 0 0 3.2 7.5c0 5.4 3.5 6.6 6.8 7A4.8 4.8 0 0 0 9 18v4" /><path d="M9 18c-4.5 2-5-2-7-2" /></svg></a></div>
+        <div className="footer-signature"><a className="footer-brand" href="#home">YCB</a><span>Yarima Contreras Blanco</span><span>© 2026</span><a className="footer-github" href="https://github.com/YariCB" target="_blank" rel="noreferrer" aria-label="GitHub"><svg className="github-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3.3-.4 6.8-1.6 6.8-7A5.4 5.4 0 0 0 19.3 4 5 5 0 0 0 19.2.8S18 0 15 2.1a13.4 13.4 0 0 0-6 0C6 0 4.8.8 4.8.8a5 5 0 0 0-.1 3.2A5.4 5.4 0 0 0 3.2 7.5c0 5.4 3.5 6.6 6.8 7A4.8 4.8 0 0 0 9 18v4" /><path d="M9 18c-4.5 2-5-2-7-2" /></svg></a></div>
       </footer>
     </main>
   );
